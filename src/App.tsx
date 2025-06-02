@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { initialGameState, move, type ChosenCol } from './game/game'
 
@@ -6,11 +6,20 @@ function App() {
   const [game, setGame] = useState(initialGameState())
   const colClick = (col: ChosenCol) => {
     if (game.endState) return; // game is over, do nothing
+    const audio = new Audio('/mixkit-video-game-retro-click-237.wav');
+    audio.play();
     setGame(game => move(game, col))
   }
   const capitalizeString = (str: string): string => {
     return str[0].toUpperCase() + str.slice(1);
   }
+
+  useEffect(() => {
+    if (game.endState) {
+      const audio = new Audio('/mixkit-final-level-bonus-2061.wav');
+      audio.play();
+    }
+  }, [game])
 
   return (
     <div className="app">
