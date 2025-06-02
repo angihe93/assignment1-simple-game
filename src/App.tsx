@@ -1,5 +1,5 @@
 import { useState } from 'react'
-// import './App.css'
+import './App.css'
 import { initialGameState, move, type ChosenCol } from './game/game'
 
 function App() {
@@ -8,30 +8,42 @@ function App() {
     if (game.endState) return; // game is over, do nothing
     setGame(game => move(game, col))
   }
+  const capitalizeString = (str: string): string => {
+    return str[0].toUpperCase() + str.slice(1);
+  }
 
   return (
-    <>
+    <div className="app">
       <h1>Connect 4</h1>
-      {!game.endState && <div>Player: {game.currentPlayer}'s turn</div>}
-      <div>Winner: {game.endState}</div>
-      <div>{[0,1,2,3,4,5,6].map(
-        (col)=><span style={{ margin: '1rem' }} 
-        onClick={()=>colClick(col as ChosenCol)}>
-          {col}</span>
+
+      {!game.endState && <div style={{ margin: '1rem' }}>Player: {capitalizeString(game.currentPlayer)}'s turn</div>}
+      {game.endState === 'yellow' || game.endState === 'red' ?
+        <div style={{ margin: '1rem' }}>Winner: {capitalizeString(game.endState)} 🎉</div> :
+        game.endState === 'draw' ?
+          <div style={{ margin: '1rem' }}>Draw</div> : ''}
+
+      <table>
+        <tr className="row">
+          {[0, 1, 2, 3, 4, 5, 6].map(
+            (col) => <th style={{ margin: '1rem' }} className="cell"
+              onClick={() => colClick(col as ChosenCol)}>
+              {col}</th>
+          )}
+        </tr>
+        {game.grid.map((row, rowIndex) => (
+          <tr key={rowIndex} className="row">
+            {row.map((cell, colIndex) => (
+              <td key={colIndex} style={{ margin: '1rem' }} className="cell">
+                {cell === 'red' ? '🔴' : cell === 'yellow' ? '🟡' : ' '}
+              </td>
+            ))}
+          </tr>
+        )
         )}
-      </div>
-      {game.grid.map((row, rowIndex) => (
-        <div key={rowIndex} className="row">
-          {row.map((cell, colIndex) => (
-            <span key={colIndex} style={{ margin: '1rem' }}>
-              {cell || 'empty'}
-            </span>
-          ))}
-        </div>
-      )
-      )}
-      <button onClick={() => setGame(initialGameState())}>Reset</button>
-  </>
+      </table>
+
+      <button onClick={() => setGame(initialGameState())} style={{ margin: '1rem' }}>Reset</button>
+    </div>
   )
 
 }
