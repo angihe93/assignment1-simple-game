@@ -6,6 +6,9 @@
   align-items: center;
   margin: 0 auto;
   /* two values for margin for top and bottom */
+  background: url('/Loop Background GIF by Trakto.gif') center center/cover no-repeat fixed;
+  min-height: 100vh;
+  width: 100vw;
 }
 
 .app {
@@ -21,7 +24,31 @@ td {
   background-color: gainsboro;
 }
 
-
 .cell {
   color: grey;
+}
+
+.flash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 0, 0, 0.3);
+  /* red or yellow */
+  animation: flash 0.5s 3;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@keyframes flash {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
